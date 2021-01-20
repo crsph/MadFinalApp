@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.TriviaQuestionnaireFragment">
+
+    <TextView
+        android:id="@+id/tvQuestionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="113dp"
+        android:text="@string/question_label"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvQuestion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="164dp"
+        android:text="@string/question"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuestionLabel" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btnAnswerOne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:insetLeft="6dp"
+            android:insetRight="6dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="@string/answer_one"
+            app:cornerRadius="0dp" />
+
+        <Button
+            android:id="@+id/btnAnswerTwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:insetLeft="6dp"
+            android:insetRight="6dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="@string/answer_two"
+            app:cornerRadius="0dp" />
+
+        <Button
+            android:id="@+id/btnAnswerThree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:insetLeft="6dp"
+            android:insetRight="6dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="@string/answer_three"
+            app:cornerRadius="0dp" />
+
+        <Button
+            android:id="@+id/btnAnswerFour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:insetLeft="6dp"
+            android:insetRight="6dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="@string/answer_four"
+            app:cornerRadius="0dp" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

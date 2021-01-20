@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/triviaCategoryFragment">
+    <fragment
+        android:id="@+id/triviaCategoryFragment"
+        android:name="com.example.madfinalapp.ui.TriviaCategoryFragment"
+        android:label="fragment_trivia_category"
+        tools:layout="@layout/fragment_trivia_category" >
+        <action
+            android:id="@+id/action_triviaCategoryFragment_to_triviaQuestionnaireFragment"
+            app:destination="@id/triviaQuestionnaireFragment" />
+        <action
+            android:id="@+id/action_triviaCategoryFragment_to_triviaHistoryFragment"
+            app:destination="@id/triviaHistoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/triviaQuestionnaireFragment"
+        android:name="com.example.madfinalapp.ui.TriviaQuestionnaireFragment"
+        android:label="fragment_trivia_questionnaire"
+        tools:layout="@layout/fragment_trivia_questionnaire" >
+        <action
+            android:id="@+id/action_triviaQuestionnaireFragment_to_triviaCategoryFragment"
+            app:destination="@id/triviaCategoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/triviaHistoryFragment"
+        android:name="com.example.madfinalapp.ui.TriviaHistoryFragment"
+        android:label="fragment_trivia_history2"
+        tools:layout="@layout/fragment_trivia_history" >
+        <action
+            android:id="@+id/action_triviaHistoryFragment_to_triviaCategoryFragment"
+            app:destination="@id/triviaCategoryFragment" />
+    </fragment>
+</navigation>
