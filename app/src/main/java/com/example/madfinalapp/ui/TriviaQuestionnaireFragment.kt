@@ -24,6 +24,7 @@ class TriviaQuestionnaireFragment : Fragment() {
 
     private val viewModel: TriviaViewModel by activityViewModels()
     private lateinit var triviaRecordRepository: TriviaRecordRepository
+    private var triviaRecordList: MutableList<TriviaRecord> = mutableListOf()
     private var triviaQuestionList: MutableList<String> = mutableListOf()
     private var counter: Int = 0
     private var buttons: ArrayList<Button> = arrayListOf()
@@ -46,46 +47,11 @@ class TriviaQuestionnaireFragment : Fragment() {
 //            triviaRecordRepository.deleteAll()
 //        }
 
-        // Sets the first question and answers
-
-
         // Initialize buttons array with four buttons
         buttons = arrayListOf(btnAnswerOne, btnAnswerTwo, btnAnswerThree, btnAnswerFour)
 
         // Provide the four buttons in the array with an action
-        for (i in 0..3) {
-            triviaQuestionIterator(counter, buttons[i].text.toString())
-
-            buttons[i].setOnClickListener {
-                counter++
-                triviaQuestionIterator(counter, buttons[i].text.toString())
-            }
-        }
-
-//        btnAnswerOne.setOnClickListener {
-//            counter++
-//            triviaQuestionIterator(counter)
-//            triviaAnswerValidation(counter, btnAnswerOne.text.toString())
-//        }
-//
-//        btnAnswerTwo.setOnClickListener {
-//            counter++
-//            triviaQuestionIterator(counter)
-//            triviaAnswerValidation(counter, btnAnswerTwo.text.toString())
-//        }
-//
-//        btnAnswerThree.setOnClickListener {
-//            counter++
-//            triviaQuestionIterator(counter)
-//            triviaAnswerValidation(counter, btnAnswerThree.text.toString())
-//        }
-//
-//        btnAnswerFour.setOnClickListener {
-//            counter++
-//            triviaQuestionIterator(counter)
-//            triviaAnswerValidation(counter, btnAnswerFour.text.toString())
-//        }
-
+        createButtons()
 
 //        btnAnswerOne.setBackgroundColor(resources.getColor(R.color.mandy))
 //        btnAnswerTwo.setBackgroundColor(resources.getColor(R.color.mandy))
@@ -95,6 +61,16 @@ class TriviaQuestionnaireFragment : Fragment() {
 //        observeButtonColorChange()
     }
 
+    private fun createButtons() {
+        for (i in 0..3) {
+            triviaQuestionIterator(counter, buttons[i].text.toString())
+
+            buttons[i].setOnClickListener {
+                counter++
+                triviaQuestionIterator(counter, buttons[i].text.toString())
+            }
+        }
+    }
 
     private fun triviaQuestionIterator(counter: Int, answer: String) {
 
@@ -158,32 +134,31 @@ class TriviaQuestionnaireFragment : Fragment() {
     }
 
     private fun triviaAnswerValidation(counter: Int, answer: String) {
-
         if (counter <= 7) {
-
             val triviaItem = viewModel.trivia.value?.get(counter)
             val triviaCategory = triviaItem?.category.toString()
             val triviaQuestion = triviaItem?.question.toString()
             val triviaCorrectAnswer = triviaItem?.correct_answer.toString()
 
+            // Check if the chosen answer is correct or wrong
             if (triviaCorrectAnswer == answer) {
-                val trivia = TriviaRecord(
+                val triviaRecord = TriviaRecord(
                     triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, true
                 )
-
-                CoroutineScope(Dispatchers.Main).launch {
-                    withContext(Dispatchers.IO) {
-                        triviaRecordRepository.insertTriviaRecord(trivia)
-                    }
-                }
+                triviaRecordList.add(triviaRecord)
             } else {
-                val trivia = TriviaRecord(
+                val triviaRecord = TriviaRecord(
                     triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, false
                 )
+                triviaRecordList.add(triviaRecord)
+            }
 
+            // Check if the triviaRecordList is populated with 8 records and insert it in the database
+            if (triviaRecordList.size == 8) {
                 CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {
-                        triviaRecordRepository.insertTriviaRecord(trivia)
+                        triviaRecordRepository.deleteTriviaRecord(triviaCategory)
+                        triviaRecordRepository.insertTriviaRecord(triviaRecordList)
                     }
                 }
             }

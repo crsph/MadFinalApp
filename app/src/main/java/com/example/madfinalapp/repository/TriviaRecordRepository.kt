@@ -25,12 +25,12 @@ class TriviaRecordRepository(context: Context) {
         return triviaDao.getTotalCorrectAnswers()
     }
 
-    suspend fun insertTriviaRecord(triviaRecord: TriviaRecord) {
+    suspend fun insertTriviaRecord(triviaRecord: List<TriviaRecord>) {
         triviaDao.insertTriviaRecord(triviaRecord)
     }
 
-    suspend fun deleteTriviaRecord(triviaRecord: TriviaRecord) {
-        triviaDao.deleteTriviaRecord(triviaRecord)
+    suspend fun deleteTriviaRecord(category: String) {
+        triviaDao.deleteTriviaRecord(category)
     }
 
     suspend fun updateTriviaRecord(triviaRecord: TriviaRecord) {
