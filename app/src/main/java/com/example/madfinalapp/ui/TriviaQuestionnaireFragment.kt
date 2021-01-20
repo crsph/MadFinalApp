@@ -38,21 +38,27 @@ class TriviaQuestionnaireFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initialize triviaRecordRepository
         triviaRecordRepository = TriviaRecordRepository(requireContext())
 
-        CoroutineScope(Dispatchers.Main).launch {
-            triviaRecordRepository.deleteAll()
-        }
+        // Deletes everything in the ROOM database for now
+//        CoroutineScope(Dispatchers.Main).launch {
+//            triviaRecordRepository.deleteAll()
+//        }
 
-        triviaQuestionIterator(counter)
+        // Sets the first question and answers
 
+
+        // Initialize buttons array with four buttons
         buttons = arrayListOf(btnAnswerOne, btnAnswerTwo, btnAnswerThree, btnAnswerFour)
 
+        // Provide the four buttons in the array with an action
         for (i in 0..3) {
+            triviaQuestionIterator(counter, buttons[i].text.toString())
+
             buttons[i].setOnClickListener {
                 counter++
-                triviaQuestionIterator(counter)
-                triviaAnswerValidation(counter, buttons[i].text.toString())
+                triviaQuestionIterator(counter, buttons[i].text.toString())
             }
         }
 
@@ -90,14 +96,9 @@ class TriviaQuestionnaireFragment : Fragment() {
     }
 
 
-    private fun triviaQuestionIterator(counter: Int) {
+    private fun triviaQuestionIterator(counter: Int, answer: String) {
 
-        /**
-         * An error occures when the player exceeds the 8th question. THe log gives an
-         * IndexOutOfBound error
-         */
-
-        val triviaArraySize = viewModel.trivia.value?.size
+        triviaAnswerValidation(counter, answer)
 
         if (counter <= 7) {
 
@@ -114,15 +115,14 @@ class TriviaQuestionnaireFragment : Fragment() {
                 // Shuffle the list with answers
                 triviaQuestionList.shuffle()
 
-
                 tvQuestionLabel.text = String.format("Question #%d", counter + 1)
 
                 // The HTML.fromHtml() decodes the HTML entity (e.g. &quot; to ")
                 tvQuestion.text = Html.fromHtml(trivia.question).toString()
-                btnAnswerOne.text = triviaQuestionList[0]
-                btnAnswerTwo.text = triviaQuestionList[1]
-                btnAnswerThree.text = triviaQuestionList[2]
-                btnAnswerFour.text = triviaQuestionList[3]
+                btnAnswerOne.text = Html.fromHtml(triviaQuestionList[0])
+                btnAnswerTwo.text = Html.fromHtml(triviaQuestionList[1])
+                btnAnswerThree.text = Html.fromHtml(triviaQuestionList[2])
+                btnAnswerFour.text = Html.fromHtml(triviaQuestionList[3])
 
                 triviaQuestionList.clear()
             }
