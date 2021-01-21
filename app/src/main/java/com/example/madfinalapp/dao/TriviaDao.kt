@@ -16,7 +16,8 @@ interface TriviaDao {
     suspend fun getTotalCorrectAnswers(): List<Int>
 
     @Insert
-    suspend fun insertTriviaRecord(triviaRecord: TriviaRecord)
+    @JvmSuppressWildcards
+    suspend fun insertTriviaRecord(triviaRecord: List<TriviaRecord>)
 
     @Query("DELETE FROM triviaRecordTable WHERE triviaCategory = :category")
     suspend fun deleteTriviaRecord(category: String)

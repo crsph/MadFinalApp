@@ -25,7 +25,7 @@ class TriviaRecordRepository(context: Context) {
         return triviaDao.getTotalCorrectAnswers()
     }
 
-    suspend fun insertTriviaRecord(triviaRecord: TriviaRecord) {
+    suspend fun insertTriviaRecord(triviaRecord: List<TriviaRecord>) {
         triviaDao.insertTriviaRecord(triviaRecord)
     }
 

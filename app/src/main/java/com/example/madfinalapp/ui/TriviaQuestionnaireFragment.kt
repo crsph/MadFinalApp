@@ -63,80 +63,45 @@ class TriviaQuestionnaireFragment : Fragment() {
     }
 
     private fun createButtons() {
-        for (i in 0..3) {
-            triviaQuestionIterator(counter, buttons[i].text.toString())
+        triviaQuestionIterator(counter)
 
+        for (i in 0..3) {
             buttons[i].setOnClickListener {
+                triviaAnswerValidation(counter, buttons[i].text.toString())
                 counter++
-                triviaQuestionIterator(counter, buttons[i].text.toString())
+                triviaQuestionIterator(counter)
             }
         }
     }
 
-    private fun triviaQuestionIterator(counter: Int, answer: String) {
-
-        triviaAnswerValidation(counter, answer)
-
+    private fun triviaQuestionIterator(counter: Int) {
         if (counter <= 7) {
-
             val trivia = viewModel.trivia.value?.get(counter)
 
             if (trivia != null) {
-                // Add the answers to a list
-                triviaQuestionList.add(trivia.correct_answer)
-
-                for (i in 0..2) {
-                    triviaQuestionList.add(trivia.incorrect_answers[i])
-                }
-
-                // Shuffle the list with answers
-                triviaQuestionList.shuffle()
+                triviaQuestionList.add(trivia.correct_answer) // Add the correct answer to triviaQuestionList
+                triviaQuestionList.addAll(trivia.incorrect_answers) // Add the incorrect answer to triviaQuestionList
+                triviaQuestionList.shuffle() // Shuffle the answers in the list
 
                 tvQuestionLabel.text = String.format("Question #%d", counter + 1)
-
-                // The HTML.fromHtml() decodes the HTML entity (e.g. &quot; to ")
-                tvQuestion.text = Html.fromHtml(trivia.question).toString()
+                tvQuestion.text = Html.fromHtml(trivia.question)
+                    .toString() // The HTML.fromHtml() decodes the HTML entity (e.g. &quot; to ")
                 btnAnswerOne.text = Html.fromHtml(triviaQuestionList[0])
                 btnAnswerTwo.text = Html.fromHtml(triviaQuestionList[1])
                 btnAnswerThree.text = Html.fromHtml(triviaQuestionList[2])
                 btnAnswerFour.text = Html.fromHtml(triviaQuestionList[3])
 
-                triviaQuestionList.clear()
+                triviaQuestionList.clear() // Empty the triviaQuestionList
             }
         } else {
             findNavController().navigate(R.id.action_triviaQuestionnaireFragment_to_triviaCategoryFragment)
         }
-
-//        val trivia = viewModel.trivia.value?.get(counter)
-
-//        if (trivia != null) {
-//            // Add the answers to a list
-//            triviaQuestionList.add(trivia.correct_answer)
-//
-//            for (i in 0..2) {
-//                triviaQuestionList.add(trivia.incorrect_answers[i])
-//            }
-//
-//            // Shuffle the list with answers
-//            triviaQuestionList.shuffle()
-//
-//
-//            tvQuestionLabel.text = String.format("Question #%d", counter + 1)
-//
-//            // The HTML.fromHtml() decodes the HTML entity (e.g. &quot; to ")
-//            tvQuestion.text = Html.fromHtml(trivia.question).toString()
-//            btnAnswerOne.text = triviaQuestionList[0]
-//            btnAnswerTwo.text = triviaQuestionList[1]
-//            btnAnswerThree.text = triviaQuestionList[2]
-//            btnAnswerFour.text = triviaQuestionList[3]
-//
-//            triviaQuestionList.clear()
-//        }
     }
 
     private fun triviaAnswerValidation(counter: Int, answer: String) {
         if (counter <= 7) {
             val triviaRecord: TriviaRecord
+            var triviaCategoryDatabaseList: List<String>
             val triviaItem = viewModel.trivia.value?.get(counter)
             val triviaCategory = triviaItem?.category.toString()
             val triviaQuestion = triviaItem?.question.toString()
@@ -147,25 +112,70 @@ class TriviaQuestionnaireFragment : Fragment() {
                 triviaRecord =
                     TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, true)
                 triviaRecordList.add(triviaRecord)
+
+                Log.d("Test", "The answer is correct and is inserted in the list")
             } else {
                 triviaRecord =
                     TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, false)
                 triviaRecordList.add(triviaRecord)
+
+                Log.d("Test", "The answer is wrong but it is inserted in the list")
             }
+
 
             // Check if the triviaRecordList is populated with 8 records and insert it in the database
             if (triviaRecordList.size == 8) {
+
+//                for (i in 0..7) {
+//                    Log.d("Trivia Record List: ", triviaRecordList[i].chosenTriviaAnswer)
+//                }
+
                 CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {
-                        triviaRecordRepository.deleteTriviaRecord(triviaCategory)
+                        triviaCategoryDatabaseList = triviaRecordRepository.getAllCategories()
 
-                        Log.d("Test","Gaat het hier doorheen?------------------------------------------------")
-
-                        for (i in 0..7) {
-                            triviaRecordRepository.insertTriviaRecord(triviaRecordList[i])
+                        if (triviaCategoryDatabaseList.isNotEmpty()) {
+                            for (category in triviaCategoryDatabaseList) {
+                                if (category == triviaCategory) {
+                                    triviaRecordRepository.deleteTriviaRecord(category)
+                                    triviaRecordRepository.insertTriviaRecord(triviaRecordList)
+                                    break
+                                }
+                            }
+                        } else {
+                            triviaRecordRepository.insertTriviaRecord(triviaRecordList)
                         }
                     }
                 }
+
+                getTriviaRecords()
+
+                triviaRecordList.clear()
+            }
+        }
+    }
+
+    private fun getTriviaRecords() {
+
+        var triviaCategory: List<String> = listOf()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                triviaCategory = triviaRecordRepository.getAllCategories()
+            }
+        }
+
+        if (triviaCategory.isEmpty()) {
+            Log.d("List size: ", "empty")
+        } else {
+            Log.d("TriviaCategory: ", triviaCategory[0])
+        }
+    }
+
+    private fun insertTriviaRecordInDatabase(triviaRecord: TriviaRecord) {
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+
             }
         }
     }

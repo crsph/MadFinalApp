@@ -1,6 +1,7 @@
 package com.example.madfinalapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -39,9 +40,9 @@ class TriviaHistoryFragment : Fragment() {
 
         triviaRecordRepository = TriviaRecordRepository(requireContext())
 
-        initViews()
-
         getTriviaRecordsFromDatabase()
+
+        initViews()
     }
 
     private fun initViews() {

@@ -38,7 +38,7 @@ class TriviaCategoryFragment : Fragment() {
 
         loadingUIToggler(false)
 
-        observeTrivia()
+//        observeTrivia()
 
         btnGeneral.setOnClickListener {
 //            changeAnswerButtonColor(0)
