@@ -2,6 +2,7 @@ package com.example.madfinalapp.ui
 
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -135,6 +136,7 @@ class TriviaQuestionnaireFragment : Fragment() {
 
     private fun triviaAnswerValidation(counter: Int, answer: String) {
         if (counter <= 7) {
+            val triviaRecord: TriviaRecord
             val triviaItem = viewModel.trivia.value?.get(counter)
             val triviaCategory = triviaItem?.category.toString()
             val triviaQuestion = triviaItem?.question.toString()
@@ -142,14 +144,12 @@ class TriviaQuestionnaireFragment : Fragment() {
 
             // Check if the chosen answer is correct or wrong
             if (triviaCorrectAnswer == answer) {
-                val triviaRecord = TriviaRecord(
-                    triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, true
-                )
+                triviaRecord =
+                    TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, true)
                 triviaRecordList.add(triviaRecord)
             } else {
-                val triviaRecord = TriviaRecord(
-                    triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, false
-                )
+                triviaRecord =
+                    TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, false)
                 triviaRecordList.add(triviaRecord)
             }
 
@@ -158,7 +158,12 @@ class TriviaQuestionnaireFragment : Fragment() {
                 CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {
                         triviaRecordRepository.deleteTriviaRecord(triviaCategory)
-                        triviaRecordRepository.insertTriviaRecord(triviaRecordList)
+
+                        Log.d("Test","Gaat het hier doorheen?------------------------------------------------")
+
+                        for (i in 0..7) {
+                            triviaRecordRepository.insertTriviaRecord(triviaRecordList[i])
+                        }
                     }
                 }
             }
