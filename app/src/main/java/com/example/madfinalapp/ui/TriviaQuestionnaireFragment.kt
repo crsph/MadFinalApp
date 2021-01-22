@@ -25,6 +25,7 @@ class TriviaQuestionnaireFragment : Fragment() {
 
     private val viewModel: TriviaViewModel by activityViewModels()
     private lateinit var triviaRecordRepository: TriviaRecordRepository
+    private lateinit var triviaCategoryDatabaseList: List<String>
     private var triviaRecordList: MutableList<TriviaRecord> = mutableListOf()
     private var triviaQuestionList: MutableList<String> = mutableListOf()
     private var counter: Int = 0
@@ -56,7 +57,7 @@ class TriviaQuestionnaireFragment : Fragment() {
         // Provide the four buttons in the array with an action
         createButtons()
 
-        getTriviaRecords()
+        triviaCategoryDatabaseList = getTriviaRecords()
     }
 
     private fun createButtons() {
@@ -98,7 +99,7 @@ class TriviaQuestionnaireFragment : Fragment() {
     private fun triviaAnswerValidation(counter: Int, answer: String) {
         if (counter <= 7) {
             val triviaRecord: TriviaRecord
-            var triviaCategoryDatabaseList: List<String>
+
             val triviaItem = viewModel.trivia.value?.get(counter)
             val triviaCategory = triviaItem?.category.toString()
             val triviaQuestion = triviaItem?.question.toString()
@@ -118,21 +119,20 @@ class TriviaQuestionnaireFragment : Fragment() {
                 Log.d("Trivia Record: ", "Inserted")
             }
 
+            for (category in triviaCategoryDatabaseList) {
+                if (category == triviaCategory) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        withContext(Dispatchers.IO) {
+                            triviaRecordRepository.deleteTriviaRecord(category)
+                        }
+                    }
+                }
+            }
+
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
-//                    triviaCategoryDatabaseList = getTriviaRecords()
-//
-//                    for (category in triviaCategoryDatabaseList) {
-//                        if (category == triviaCategory) {
-//                            triviaRecordRepository.updateTriviaRecord(triviaRecordList)
-//                        } else {
-//
-//                        }
-//                    }
-
                     triviaRecordRepository.insertTriviaRecord(triviaRecordList)
                 }
-
                 triviaRecordRepository.getAllTriviaRecords()
             }
 
