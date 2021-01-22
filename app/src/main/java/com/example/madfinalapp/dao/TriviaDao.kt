@@ -23,7 +23,7 @@ interface TriviaDao {
     suspend fun deleteTriviaRecord(category: String)
 
     @Update
-    suspend fun updateTriviaRecord(triviaRecord: TriviaRecord)
+    suspend fun updateTriviaRecord(triviaRecord: List<TriviaRecord>)
 
     @Query("DELETE FROM triviaRecordTable")
     suspend fun nukeTable()

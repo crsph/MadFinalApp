@@ -33,7 +33,7 @@ class TriviaRecordRepository(context: Context) {
         triviaDao.deleteTriviaRecord(category)
     }
 
-    suspend fun updateTriviaRecord(triviaRecord: TriviaRecord) {
+    suspend fun updateTriviaRecord(triviaRecord: List<TriviaRecord>) {
         triviaDao.updateTriviaRecord(triviaRecord)
     }
 
