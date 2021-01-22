@@ -2,7 +2,6 @@ package com.example.madfinalapp.ui
 
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +24,7 @@ class TriviaQuestionnaireFragment : Fragment() {
 
     private val viewModel: TriviaViewModel by activityViewModels()
     private lateinit var triviaRecordRepository: TriviaRecordRepository
-    private lateinit var triviaCategoryDatabaseList: List<String>
+    private var triviaCategoryDatabaseList: List<String> = listOf()
     private var triviaRecordList: MutableList<TriviaRecord> = mutableListOf()
     private var triviaQuestionList: MutableList<String> = mutableListOf()
     private var counter: Int = 0
@@ -44,21 +43,14 @@ class TriviaQuestionnaireFragment : Fragment() {
         // Initialize triviaRecordRepository
         triviaRecordRepository = TriviaRecordRepository(requireContext())
 
-//        CoroutineScope(Dispatchers.Main).launch {
-//            withContext(Dispatchers.IO) {
-//                triviaRecordRepository.deleteAll()
-//            }
-//        }
-
+        // Populate triviaCategoryDatabaseList with all the categories from the database
+        triviaCategoryDatabaseList = getTriviaRecords()
 
         // Initialize buttons array with four buttons
         buttons = arrayListOf(btnAnswerOne, btnAnswerTwo, btnAnswerThree, btnAnswerFour)
 
         // Provide the four buttons in the array with an action
         createButtons()
-
-//        triviaCategoryDatabaseList = getTriviaRecords()
-        getTriviaRecords()
     }
 
 
@@ -94,16 +86,11 @@ class TriviaQuestionnaireFragment : Fragment() {
                 triviaQuestionList.clear() // Empty the triviaQuestionList
             }
         } else {
-            Log.d("Start ", "Inserting record")
+            val triviaCategory = viewModel.trivia.value?.get(0)?.category.toString()
 
-            CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    triviaRecordRepository.insertTriviaRecord(triviaRecordList)
-                }
-                triviaRecordRepository.getAllTriviaRecords()
-            }
+            deleteTriviaRecordsFromDatabase(triviaCategory)
 
-            Log.d("End ", "Inserting record")
+            insertTriviaRecordsInDatabase()
 
             findNavController().navigate(R.id.action_triviaQuestionnaireFragment_to_triviaCategoryFragment)
         }
@@ -123,52 +110,41 @@ class TriviaQuestionnaireFragment : Fragment() {
                 triviaRecord =
                     TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, true)
                 triviaRecordList.add(triviaRecord)
-                Log.d("Trivia Record: ", "Correct")
             } else {
                 triviaRecord =
                     TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, false)
                 triviaRecordList.add(triviaRecord)
-
-                Log.d("Trivia Record: ", "Wrong")
             }
-
-//            for (category in triviaCategoryDatabaseList) {
-//                if (category == triviaCategory) {
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        withContext(Dispatchers.IO) {
-//                            triviaRecordRepository.deleteTriviaRecord(category)
-//                        }
-//                    }
-//                } else {
-//                    Log.d("DB does not contain: ", triviaCategory)
-//                }
-//            }
         }
     }
 
     private fun getTriviaRecords(): List<String> {
-
-        Log.d("Start ", "getTriviaRecords method")
-
         var triviaCategoryDatabaseList: List<String> = listOf()
 
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 triviaCategoryDatabaseList = triviaRecordRepository.getAllCategories()
-                Log.d("Processing ", "getTriviaRecords method")
-            }
-            if (triviaCategoryDatabaseList.isEmpty()) {
-                Log.d("TriviaCategoryList ", "empty====================")
-            } else {
-                for (i in triviaCategoryDatabaseList) {
-                    Log.d("Category", i)
-                }
             }
         }
 
-        Log.d("End ", "getTriviaRecords method")
-
         return triviaCategoryDatabaseList
+    }
+
+    private fun insertTriviaRecordsInDatabase() {
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                triviaRecordRepository.insertTriviaRecord(triviaRecordList)
+            }
+            triviaRecordRepository.getAllTriviaRecords()
+        }
+    }
+
+    private fun deleteTriviaRecordsFromDatabase(triviaCategory: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                triviaRecordRepository.deleteTriviaRecord(triviaCategory)
+            }
+        }
     }
 
 //    private fun observeButtonColorChange() {
