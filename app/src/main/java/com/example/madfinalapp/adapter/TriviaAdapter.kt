@@ -41,7 +41,7 @@ class TriviaAdapter(
 
         fun bind(triviaCategory: String, triviaTotalPercentage: Int) {
             itemView.tvCategory.text = triviaCategory
-            itemView.tvPercentage.text = triviaTotalPercentage.toString()
+            itemView.tvPercentage.text = "$triviaTotalPercentage%"
         }
     }
 }

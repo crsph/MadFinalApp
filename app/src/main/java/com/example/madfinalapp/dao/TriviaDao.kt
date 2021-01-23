@@ -12,7 +12,7 @@ interface TriviaDao {
     @Query("SELECT triviaCategory FROM triviaRecordTable GROUP BY triviaCategory")
     suspend fun getAllCategories(): List<String>
 
-    @Query("SELECT SUM(isCorrect) FROM triviaRecordTable WHERE isCorrect = 1 GROUP BY triviaCategory")
+    @Query("SELECT ((100 / 8) * SUM(isCorrect)) FROM triviaRecordTable WHERE isCorrect = 1 GROUP BY triviaCategory")
     suspend fun getTotalCorrectAnswers(): List<Int>
 
     @Insert
