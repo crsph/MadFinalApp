@@ -4,7 +4,6 @@ import android.content.Context
 import com.example.madfinalapp.dao.TriviaDao
 import com.example.madfinalapp.dao.TriviaRecordRoomDatabase
 import com.example.madfinalapp.model.TriviaRecord
-import com.example.madfinalapp.model.TriviaScore
 
 class TriviaRecordRepository(context: Context) {
     private var triviaDao: TriviaDao
@@ -22,7 +21,7 @@ class TriviaRecordRepository(context: Context) {
         return triviaDao.getAllCategories()
     }
 
-    suspend fun getTotalCorrectAnswers(): List<TriviaScore> {
+    suspend fun getTotalCorrectAnswers(): List<Int> {
         return triviaDao.getTotalCorrectAnswers()
     }
 

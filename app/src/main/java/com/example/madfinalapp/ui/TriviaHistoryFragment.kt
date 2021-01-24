@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madfinalapp.R
 import com.example.madfinalapp.adapter.TriviaAdapter
-import com.example.madfinalapp.model.TriviaScore
 import com.example.madfinalapp.repository.TriviaRecordRepository
 import kotlinx.android.synthetic.main.fragment_trivia_history.*
 import kotlinx.coroutines.CoroutineScope
@@ -43,7 +42,7 @@ class TriviaHistoryFragment : Fragment() {
 
         getTriviaRecordsFromDatabase()
 
-//        initViews()
+        initViews()
     }
 
     private fun initViews() {
@@ -75,11 +74,6 @@ class TriviaHistoryFragment : Fragment() {
                 triviaRecordRepository.getTotalCorrectAnswers()
             }
 
-            for (i in totalCorrectAnswer) {
-                Log.d("Test", "$i correct answers")
-                Log.d("List size", totalCorrectAnswer.size.toString())
-            }
-
             val percentage = convertToPercentage(totalCorrectAnswer)
 
             this@TriviaHistoryFragment.triviaCategory.clear()
@@ -88,21 +82,15 @@ class TriviaHistoryFragment : Fragment() {
             this@TriviaHistoryFragment.triviaCategory.addAll(category)
             this@TriviaHistoryFragment.triviaTotalPercentage.addAll(percentage)
 
-//            triviaRecordAdapter.notifyDataSetChanged()
+            triviaRecordAdapter.notifyDataSetChanged()
         }
     }
 
-    private fun convertToPercentage(totalCorrectAnswer: List<TriviaScore>): List<Double> {
+    private fun convertToPercentage(totalCorrectAnswer: List<Int>): List<Double> {
         val percentageInDoubleList: MutableList<Double> = mutableListOf()
-        var percentage: Double
 
         for (i in totalCorrectAnswer) {
-            if (i.triviaTotalCorrect != null) {
-                percentage = ((100.0 / 8.0) * i.triviaTotalCorrect)
-            } else {
-                percentage = 0.0
-            }
-
+            val percentage = ((100.0 / 8.0) * i)
             percentageInDoubleList.add(percentage)
         }
         return percentageInDoubleList
