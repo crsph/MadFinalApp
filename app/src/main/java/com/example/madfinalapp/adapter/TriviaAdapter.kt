@@ -1,7 +1,6 @@
 package com.example.madfinalapp.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +21,7 @@ class TriviaAdapter(
         context = parent.context
 
         return ViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.item_trivia, parent, false)
+            LayoutInflater.from(context).inflate(R.layout.item_trivia_record, parent, false)
         )
     }
 

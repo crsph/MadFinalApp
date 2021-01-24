@@ -33,5 +33,17 @@
         <action
             android:id="@+id/action_triviaHistoryFragment_to_triviaCategoryFragment"
             app:destination="@id/triviaCategoryFragment" />
+        <action
+            android:id="@+id/action_triviaHistoryFragment_to_triviaHistoryDetailFragment"
+            app:destination="@id/triviaHistoryDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/triviaHistoryDetailFragment"
+        android:name="com.example.madfinalapp.triviaHistoryDetailFragment"
+        android:label="fragment_trivia_history_detail"
+        tools:layout="@layout/fragment_trivia_history_detail" >
+        <action
+            android:id="@+id/action_triviaHistoryDetailFragment_to_triviaHistoryFragment"
+            app:destination="@id/triviaHistoryFragment" />
     </fragment>
 </navigation>
