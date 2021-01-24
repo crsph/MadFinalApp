@@ -46,7 +46,7 @@ class TriviaQuestionnaireFragment : Fragment() {
         triviaRecordRepository = TriviaRecordRepository(requireContext())
 
         // Populate triviaCategoryDatabaseList with all the categories from the database
-        triviaCategoryDatabaseList = getTriviaRecords()
+//        triviaCategoryDatabaseList = getTriviaRecords()
 
         // Initialize buttons array with four buttons
         buttons = arrayListOf(btnAnswerOne, btnAnswerTwo, btnAnswerThree, btnAnswerFour)
@@ -54,7 +54,6 @@ class TriviaQuestionnaireFragment : Fragment() {
         // Provide the four buttons in the array with an action
         createButtons()
     }
-
 
     private fun createButtons() {
         triviaQuestionIterator(counter)
@@ -103,7 +102,7 @@ class TriviaQuestionnaireFragment : Fragment() {
             val triviaRecord: TriviaRecord
 
             val triviaItem = viewModel.trivia.value?.get(counter)
-            val triviaCategory = triviaItem?.category.toString()
+            val triviaCategory = triviaItem?.category.toString().replace("Entertainment: ", "")
             val triviaQuestion = triviaItem?.question.toString()
             val triviaCorrectAnswer = triviaItem?.correct_answer.toString()
 
