@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.madfinalapp.R
 import com.example.madfinalapp.model.TriviaRecord
+import com.example.madfinalapp.model.TriviaScoreRecord
 import com.example.madfinalapp.repository.TriviaRecordRepository
 import com.example.madfinalapp.vm.TriviaViewModel
 import kotlinx.android.synthetic.main.fragment_trivia_questionnaire.*
@@ -27,8 +28,10 @@ class TriviaQuestionnaireFragment : Fragment() {
     private var triviaCategoryDatabaseList: List<String> = listOf()
     private var triviaRecordList: MutableList<TriviaRecord> = mutableListOf()
     private var triviaQuestionList: MutableList<String> = mutableListOf()
-    private var counter: Int = 0
     private var buttons: ArrayList<Button> = arrayListOf()
+    private var counter: Int = 0
+    private var totalCorrectAnswers: Double = 0.0
+    private var totalWrongAnswers: Double = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,6 +95,8 @@ class TriviaQuestionnaireFragment : Fragment() {
 
             insertTriviaRecordsInDatabase()
 
+            insertTriviaScoreRecordsInDatabase(triviaCategory, totalCorrectAnswers, totalWrongAnswers)
+
             findNavController().navigate(R.id.action_triviaQuestionnaireFragment_to_triviaCategoryFragment)
         }
     }
@@ -108,12 +113,14 @@ class TriviaQuestionnaireFragment : Fragment() {
             // Check if the chosen answer is correct or wrong
             if (triviaCorrectAnswer == answer) {
                 triviaRecord =
-                    TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, true)
+                    TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer)
                 triviaRecordList.add(triviaRecord)
+                totalCorrectAnswers++
             } else {
                 triviaRecord =
-                    TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, false)
+                    TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer)
                 triviaRecordList.add(triviaRecord)
+                totalWrongAnswers++
             }
         }
     }
@@ -139,6 +146,21 @@ class TriviaQuestionnaireFragment : Fragment() {
         }
     }
 
+    private fun insertTriviaScoreRecordsInDatabase(
+        category: String,
+        totalCorrect: Double,
+        totalWrong: Double
+    ) {
+        val triviaScoreRecord = TriviaScoreRecord(category, totalCorrect, totalWrong)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                triviaRecordRepository.insertTriviaScoreRecord(triviaScoreRecord)
+            }
+            triviaRecordRepository.getAllTriviaRecords()
+        }
+    }
+
     private fun deleteTriviaRecordsFromDatabase(triviaCategory: String) {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
@@ -146,23 +168,4 @@ class TriviaQuestionnaireFragment : Fragment() {
             }
         }
     }
-
-//    private fun observeButtonColorChange() {
-//        val numbers = resources.getIntArray(R.array.color_array)
-//
-//        setFragmentResultListener(REQ_COLOR_KEY) { key, bundle ->
-//            bundle.getString(BUNDLE_COLOR_KEY)?.let {
-//
-//                val intValue = it.toInt()
-//
-//                btnAnswerOne.setBackgroundColor(resources.getColor(numbers[intValue]))
-//                btnAnswerTwo.setBackgroundColor(resources.getColor(numbers[intValue]))
-//                btnAnswerThree.setBackgroundColor(resources.getColor(numbers[intValue]))
-//                btnAnswerFour.setBackgroundColor(resources.getColor(numbers[intValue]))
-//
-//            } ?: Log.e("ButtonColor", "Couldn't change button color")
-//
-//        }
-//    }
-
 }

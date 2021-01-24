@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.item_trivia.view.*
 
 class TriviaAdapter(
     private val triviaCategoryList: List<String>,
-    private val triviaTotalPercentageCorrectList: List<Int>,
+    private val triviaTotalPercentageCorrectList: List<Double>,
     private val onClick: (Int) -> Unit
 ) :
     RecyclerView.Adapter<TriviaAdapter.ViewHolder>() {
@@ -39,7 +39,7 @@ class TriviaAdapter(
             }
         }
 
-        fun bind(triviaCategory: String, triviaTotalPercentage: Int) {
+        fun bind(triviaCategory: String, triviaTotalPercentage: Double) {
             itemView.tvCategory.text = triviaCategory
             itemView.tvPercentage.text = "$triviaTotalPercentage%"
         }

@@ -4,20 +4,17 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "triviaRecordTable")
-data class TriviaRecord(
+@Entity(tableName = "triviaScoreRecordTable")
+data class TriviaScoreRecord(
 
     @ColumnInfo(name = "triviaCategory")
     val triviaCategory: String,
 
-    @ColumnInfo(name = "triviaQuestion")
-    val triviaQuestion: String,
+    @ColumnInfo(name = "totalCorrectAnswers")
+    val totalCorrectAnswers: Double,
 
-    @ColumnInfo(name = "correctAnswer")
-    val correctTriviaAnswer: String,
-
-    @ColumnInfo(name = "chosenAnswer")
-    val chosenTriviaAnswer: String,
+    @ColumnInfo(name = "totalWrongAnswers")
+    val totalWrongAnswers: Double,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

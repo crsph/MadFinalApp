@@ -24,7 +24,7 @@ class TriviaHistoryFragment : Fragment() {
 
     private lateinit var triviaRecordRepository: TriviaRecordRepository
     private val triviaCategory = arrayListOf<String>()
-    private val triviaTotalPercentage = arrayListOf<Int>()
+    private val triviaTotalPercentage = arrayListOf<Double>()
     private lateinit var triviaRecordAdapter: TriviaAdapter
 
     override fun onCreateView(
@@ -70,9 +70,15 @@ class TriviaHistoryFragment : Fragment() {
                 triviaRecordRepository.getAllCategories()
             }
 
-            val percentage = withContext(Dispatchers.IO) {
+            val totalCorrectAnswer = withContext(Dispatchers.IO) {
                 triviaRecordRepository.getTotalCorrectAnswers()
             }
+
+            for (i in totalCorrectAnswer) {
+                Log.d("Test", i.toString())
+            }
+
+            val percentage = convertToPercentage(totalCorrectAnswer)
 
             this@TriviaHistoryFragment.triviaCategory.clear()
             this@TriviaHistoryFragment.triviaTotalPercentage.clear()
@@ -82,5 +88,15 @@ class TriviaHistoryFragment : Fragment() {
 
             triviaRecordAdapter.notifyDataSetChanged()
         }
+    }
+
+    private fun convertToPercentage(totalCorrectAnswer: List<Double>): List<Double> {
+        val percentageInDoubleList: MutableList<Double> = mutableListOf()
+
+        for (i in totalCorrectAnswer) {
+            val percentage = ((100.0 / 8.0) * i)
+            percentageInDoubleList.add(percentage)
+        }
+        return percentageInDoubleList
     }
 }

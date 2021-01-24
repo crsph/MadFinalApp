@@ -12,8 +12,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.madfinalapp.R
 import com.example.madfinalapp.model.Trivia
+import com.example.madfinalapp.repository.TriviaRecordRepository
+import com.example.madfinalapp.repository.TriviaRepository
 import com.example.madfinalapp.vm.TriviaViewModel
 import kotlinx.android.synthetic.main.fragment_trivia_category.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -25,6 +31,7 @@ class TriviaCategoryFragment : Fragment() {
 
     private val viewModel: TriviaViewModel by activityViewModels()
     private val triviaList = arrayListOf<Trivia>()
+    private lateinit var triviaRecordRepository: TriviaRecordRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +42,14 @@ class TriviaCategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+//        triviaRecordRepository = TriviaRecordRepository(requireContext())
+//
+//        CoroutineScope(Dispatchers.Main).launch {
+//            withContext(Dispatchers.IO) {
+//                triviaRecordRepository.deleteAll()
+//            }
+//        }
 
         loadingUIToggler(false)
 
@@ -100,7 +115,7 @@ class TriviaCategoryFragment : Fragment() {
         })
     }
 
-    private fun loadingUIToggler(boolean : Boolean) {
+    private fun loadingUIToggler(boolean: Boolean) {
         ivOverlay.isVisible = boolean
         loadingPanel.isVisible = boolean
     }
