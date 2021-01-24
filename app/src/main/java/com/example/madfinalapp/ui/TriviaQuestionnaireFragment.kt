@@ -11,7 +11,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.madfinalapp.R
 import com.example.madfinalapp.model.TriviaRecord
-import com.example.madfinalapp.model.TriviaScoreRecord
 import com.example.madfinalapp.repository.TriviaRecordRepository
 import com.example.madfinalapp.vm.TriviaViewModel
 import kotlinx.android.synthetic.main.fragment_trivia_questionnaire.*
@@ -95,8 +94,6 @@ class TriviaQuestionnaireFragment : Fragment() {
 
             insertTriviaRecordsInDatabase()
 
-            insertTriviaScoreRecordsInDatabase(triviaCategory, totalCorrectAnswers, totalWrongAnswers)
-
             findNavController().navigate(R.id.action_triviaQuestionnaireFragment_to_triviaCategoryFragment)
         }
     }
@@ -113,12 +110,12 @@ class TriviaQuestionnaireFragment : Fragment() {
             // Check if the chosen answer is correct or wrong
             if (triviaCorrectAnswer == answer) {
                 triviaRecord =
-                    TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer)
+                    TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, true)
                 triviaRecordList.add(triviaRecord)
                 totalCorrectAnswers++
             } else {
                 triviaRecord =
-                    TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer)
+                    TriviaRecord(triviaCategory, triviaQuestion, triviaCorrectAnswer, answer, false)
                 triviaRecordList.add(triviaRecord)
                 totalWrongAnswers++
             }
@@ -141,21 +138,6 @@ class TriviaQuestionnaireFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 triviaRecordRepository.insertTriviaRecord(triviaRecordList)
-            }
-            triviaRecordRepository.getAllTriviaRecords()
-        }
-    }
-
-    private fun insertTriviaScoreRecordsInDatabase(
-        category: String,
-        totalCorrect: Double,
-        totalWrong: Double
-    ) {
-        val triviaScoreRecord = TriviaScoreRecord(category, totalCorrect, totalWrong)
-
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                triviaRecordRepository.insertTriviaScoreRecord(triviaScoreRecord)
             }
             triviaRecordRepository.getAllTriviaRecords()
         }

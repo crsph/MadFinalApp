@@ -2,7 +2,7 @@ package com.example.madfinalapp.dao
 
 import androidx.room.*
 import com.example.madfinalapp.model.TriviaRecord
-import com.example.madfinalapp.model.TriviaScoreRecord
+import com.example.madfinalapp.model.TriviaScore
 
 @Dao
 interface TriviaDao {
@@ -13,14 +13,13 @@ interface TriviaDao {
     @Query("SELECT triviaCategory FROM triviaRecordTable GROUP BY triviaCategory")
     suspend fun getAllCategories(): List<String>
 
-    @Query("SELECT totalCorrectAnswers FROM triviaScoreRecordTable")
-    suspend fun getTotalCorrectAnswers(): List<Double>
+
+     @Query("SELECT triviaCategory, COALESCE(SUM(isCorrect), NULL) AS totalCorrect FROM triviaRecordTable WHERE isCorrect = 1 GROUP BY triviaCategory")
+//    @Query("SELECT triviaCategory, SUM(isCorrect) FROM triviaRecordTable WHERE isCorrect = 1 GROUP BY triviaCategory")
+    suspend fun getTotalCorrectAnswers(): List<TriviaScore>
 
     @Insert
     suspend fun insertTriviaRecord(triviaRecord: List<TriviaRecord>)
-
-    @Insert
-    suspend fun insertTriviaScoreRecord(triviaScoreRecord: TriviaScoreRecord)
 
     @Query("DELETE FROM triviaRecordTable WHERE triviaCategory = :category")
     suspend fun deleteTriviaRecord(category: String)

@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.madfinalapp.dao.TriviaDao
 import com.example.madfinalapp.dao.TriviaRecordRoomDatabase
 import com.example.madfinalapp.model.TriviaRecord
-import com.example.madfinalapp.model.TriviaScoreRecord
+import com.example.madfinalapp.model.TriviaScore
 
 class TriviaRecordRepository(context: Context) {
     private var triviaDao: TriviaDao
@@ -22,16 +22,12 @@ class TriviaRecordRepository(context: Context) {
         return triviaDao.getAllCategories()
     }
 
-    suspend fun getTotalCorrectAnswers(): List<Double> {
+    suspend fun getTotalCorrectAnswers(): List<TriviaScore> {
         return triviaDao.getTotalCorrectAnswers()
     }
 
     suspend fun insertTriviaRecord(triviaRecord: List<TriviaRecord>) {
         triviaDao.insertTriviaRecord(triviaRecord)
-    }
-
-    suspend fun insertTriviaScoreRecord(triviaScoreRecord: TriviaScoreRecord) {
-        triviaDao.insertTriviaScoreRecord(triviaScoreRecord)
     }
 
     suspend fun deleteTriviaRecord(category: String) {

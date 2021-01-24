@@ -1,6 +1,7 @@
 package com.example.madfinalapp.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,8 +26,10 @@ class TriviaAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(triviaCategoryList[position], triviaTotalPercentageCorrectList[position])
+    }
+
 
     override fun getItemCount(): Int {
         return triviaCategoryList.size

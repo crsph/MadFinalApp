@@ -19,6 +19,9 @@ data class TriviaRecord(
     @ColumnInfo(name = "chosenAnswer")
     val chosenTriviaAnswer: String,
 
+    @ColumnInfo(name = "isCorrect")
+    val isCorrect: Boolean,
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     var id: Long? = null
