@@ -24,7 +24,6 @@ class TriviaQuestionnaireFragment : Fragment() {
 
     private val viewModel: TriviaViewModel by activityViewModels()
     private lateinit var triviaRecordRepository: TriviaRecordRepository
-    private var triviaCategoryDatabaseList: List<String> = listOf()
     private var triviaRecordList: MutableList<TriviaRecord> = mutableListOf()
     private var triviaQuestionList: MutableList<String> = mutableListOf()
     private var buttons: ArrayList<Button> = arrayListOf()
@@ -44,9 +43,6 @@ class TriviaQuestionnaireFragment : Fragment() {
 
         // Initialize triviaRecordRepository
         triviaRecordRepository = TriviaRecordRepository(requireContext())
-
-        // Populate triviaCategoryDatabaseList with all the categories from the database
-//        triviaCategoryDatabaseList = getTriviaRecords()
 
         // Initialize buttons array with four buttons
         buttons = arrayListOf(btnAnswerOne, btnAnswerTwo, btnAnswerThree, btnAnswerFour)
@@ -119,18 +115,6 @@ class TriviaQuestionnaireFragment : Fragment() {
                 totalWrongAnswers++
             }
         }
-    }
-
-    private fun getTriviaRecords(): List<String> {
-        var triviaCategoryDatabaseList: List<String> = listOf()
-
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                triviaCategoryDatabaseList = triviaRecordRepository.getAllCategories()
-            }
-        }
-
-        return triviaCategoryDatabaseList
     }
 
     private fun insertTriviaRecordsInDatabase() {

@@ -2,7 +2,6 @@ package com.example.madfinalapp.ui
 
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +33,6 @@ class TriviaHistoryDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_trivia_history_detail, container, false)
     }
 
@@ -79,16 +77,22 @@ class TriviaHistoryDetailFragment : Fragment() {
                 triviaRecordRepository.getTriviaRecord(triviaCategory)
             }
 
-            Log.d("Test: ", triviaRecordList.size.toString())
-
             triviaQuestionList.clear()
             triviaChosenAnswerList.clear()
             triviaCorrectAnswerList.clear()
 
+            var counter = 1
+
             for (i in triviaRecordList) {
-                triviaQuestionList.add(Html.fromHtml(i.triviaQuestion).toString())
-                triviaChosenAnswerList.add(i.chosenTriviaAnswer)
-                triviaCorrectAnswerList.add(i.correctTriviaAnswer)
+                val triviaQuestion =
+                    counter.toString() + ". " + Html.fromHtml(i.triviaQuestion).toString()
+                val triviaChosenAnswer = "Your answer: " + i.chosenTriviaAnswer
+                val triviaCorrectAnswer = "Correct answer: " + i.correctTriviaAnswer
+
+                triviaQuestionList.add(triviaQuestion)
+                triviaChosenAnswerList.add(triviaChosenAnswer)
+                triviaCorrectAnswerList.add(triviaCorrectAnswer)
+                counter++
             }
 
             triviaHistoryDetailAdapter.notifyDataSetChanged()

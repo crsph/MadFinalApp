@@ -1,5 +1,6 @@
 package com.example.madfinalapp.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +42,7 @@ class TriviaAdapter(
             }
         }
 
+        @SuppressLint("SetTextI18n")
         fun bind(triviaCategory: String, triviaTotalPercentage: Double) {
             itemView.tvCategory.text = triviaCategory
             itemView.tvPercentage.text = "$triviaTotalPercentage%"

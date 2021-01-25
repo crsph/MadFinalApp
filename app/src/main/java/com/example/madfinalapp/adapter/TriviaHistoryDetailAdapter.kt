@@ -37,13 +37,10 @@ class TriviaHistoryDetailAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         fun bind(triviaQuestion: String, triviaChosenAnswer: String, triviaCorrectAnswer: String) {
             itemView.tvHistoryDetailQuestion.text = triviaQuestion
             itemView.tvHistoryDetailChosenAnswer.text = triviaChosenAnswer
             itemView.tvHistoryDetailCorrectAnswer.text = triviaCorrectAnswer
         }
     }
-
-
 }
