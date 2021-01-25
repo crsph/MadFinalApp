@@ -138,7 +138,6 @@ class TriviaQuestionnaireFragment : Fragment() {
             withContext(Dispatchers.IO) {
                 triviaRecordRepository.insertTriviaRecord(triviaRecordList)
             }
-            triviaRecordRepository.getAllTriviaRecords()
         }
     }
 

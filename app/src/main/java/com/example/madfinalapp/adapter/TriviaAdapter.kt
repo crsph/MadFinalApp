@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madfinalapp.R
-import kotlinx.android.synthetic.main.item_trivia.view.*
+import kotlinx.android.synthetic.main.item_trivia_record.view.*
 
 class TriviaAdapter(
     private val triviaCategoryList: List<String>,

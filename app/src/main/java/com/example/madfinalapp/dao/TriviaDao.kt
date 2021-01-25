@@ -6,12 +6,11 @@ import com.example.madfinalapp.model.TriviaRecord
 @Dao
 interface TriviaDao {
 
-    @Query("SELECT * FROM triviaRecordTable")
-    suspend fun getAllTriviaRecord(): List<TriviaRecord>
+    @Query("SELECT * FROM triviaRecordTable WHERE triviaCategory = :category")
+    suspend fun getTriviaRecord(category: String): List<TriviaRecord>
 
     @Query("SELECT triviaCategory FROM triviaRecordTable GROUP BY triviaCategory")
     suspend fun getAllCategories(): List<String>
-
 
     @Query("SELECT SUM(isCorrect) FROM triviaRecordTable GROUP BY triviaCategory")
     suspend fun getTotalCorrectAnswers(): List<Int>

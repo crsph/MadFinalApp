@@ -1,11 +1,15 @@
 package com.example.madfinalapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +23,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+const val REQ_TRIVIA_HISTORY_KEY = "req_trivia_history"
+const val BUNDLE_TRIVIA_HISTORY_KEY = "bundle_trivia_history"
 
 class TriviaHistoryFragment : Fragment() {
 
@@ -60,8 +66,13 @@ class TriviaHistoryFragment : Fragment() {
         createItemTouchHelper().attachToRecyclerView(rvTriviaHistory)
     }
 
-    private fun onMovieClick(index: Int) {
-        Toast.makeText(context, "Hello World!", Toast.LENGTH_SHORT).show()
+    private fun onMovieClick(position: Int) {
+        setFragmentResult(
+            REQ_TRIVIA_HISTORY_KEY,
+            bundleOf(Pair(BUNDLE_TRIVIA_HISTORY_KEY, position))
+        )
+
+        findNavController().navigate(R.id.action_triviaHistoryFragment_to_triviaHistoryDetailFragment)
     }
 
     private fun createItemTouchHelper(): ItemTouchHelper {

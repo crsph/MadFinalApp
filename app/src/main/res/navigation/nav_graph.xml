@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/triviaHistoryDetailFragment"
-        android:name="com.example.madfinalapp.triviaHistoryDetailFragment"
+        android:name="com.example.madfinalapp.ui.TriviaHistoryDetailFragment"
         android:label="fragment_trivia_history_detail"
         tools:layout="@layout/fragment_trivia_history_detail" >
         <action

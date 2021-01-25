@@ -13,8 +13,8 @@ class TriviaRecordRepository(context: Context) {
         triviaDao = triviaRecordRoomDatabase!!.triviaRecordDao()
     }
 
-    suspend fun getAllTriviaRecords(): List<TriviaRecord> {
-        return triviaDao.getAllTriviaRecord()
+    suspend fun getTriviaRecord(triviaCategory: String): List<TriviaRecord> {
+        return triviaDao.getTriviaRecord(triviaCategory)
     }
 
     suspend fun getAllCategories(): List<String> {
