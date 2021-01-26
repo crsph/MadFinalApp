@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.example.madfinalapp.R
 
 class MainActivity : AppCompatActivity() {
