@@ -48,6 +48,9 @@ class TriviaHistoryDetailFragment : Fragment() {
         initViews()
     }
 
+    /**
+     * Prepares the recyclerview
+     */
     private fun initViews() {
         triviaHistoryDetailAdapter = TriviaHistoryDetailAdapter(
             triviaQuestionList,
@@ -65,14 +68,20 @@ class TriviaHistoryDetailFragment : Fragment() {
         )
     }
 
+    /**
+     * Retrieve the history from the database
+     */
     private fun getTriviaHistoryFromDatabase() {
         CoroutineScope(Dispatchers.Main).launch {
+
+            // Retrieve all the categories from the database
             val triviaCategoryList = withContext(Dispatchers.IO) {
                 triviaRecordRepository.getAllCategories()
             }
 
             val triviaCategory = triviaCategoryList[position]
 
+            // Retrieve all the trivia records from that specific category
             val triviaRecordList = withContext(Dispatchers.IO) {
                 triviaRecordRepository.getTriviaRecord(triviaCategory)
             }
@@ -99,6 +108,9 @@ class TriviaHistoryDetailFragment : Fragment() {
         }
     }
 
+    /**
+     * Retrieves the position of the category from the Trivia History list
+     */
     private fun observeTriviaHistoryPosition() {
         setFragmentResultListener(REQ_TRIVIA_HISTORY_KEY) { _, bundle ->
             bundle.getInt(BUNDLE_TRIVIA_HISTORY_KEY).let {

@@ -32,8 +32,4 @@ class TriviaRecordRepository(context: Context) {
     suspend fun deleteTriviaRecord(category: String) {
         triviaDao.deleteTriviaRecord(category)
     }
-
-    suspend fun deleteAll() {
-        triviaDao.nukeTable()
-    }
 }

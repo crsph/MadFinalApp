@@ -27,6 +27,7 @@ class TriviaCategoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // loadingUIToggler set on false to prevent the loading circle to start loading at boot up
         loadingUIToggler(false)
 
         btnGeneral.setOnClickListener {
@@ -62,16 +63,24 @@ class TriviaCategoryFragment : Fragment() {
         }
     }
 
+    /**
+     * Navigates from the category fragment to the questionnaire fragment
+     */
     private fun navigateToQuestionnaire(category: Int) {
+        // Makes the API call to retrieve all the questions as a JSON object
         viewModel.getTrivia(category)
 
         loadingUIToggler(true)
 
+        // A timer has been schedule so that the system gets enough time to retrieve the questions
         Timer().schedule(2000) {
             findNavController().navigate(R.id.action_triviaCategoryFragment_to_triviaQuestionnaireFragment)
         }
     }
 
+    /**
+     * Displays the progressive loading circle when a category has been chosen
+     */
     private fun loadingUIToggler(boolean: Boolean) {
         ivOverlay.isVisible = boolean
         loadingPanel.isVisible = boolean

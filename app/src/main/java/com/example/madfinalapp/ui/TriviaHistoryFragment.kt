@@ -49,8 +49,11 @@ class TriviaHistoryFragment : Fragment() {
         initViews()
     }
 
+    /**
+     * Prepares the recyclerview
+     */
     private fun initViews() {
-        triviaRecordAdapter = TriviaAdapter(triviaCategory, triviaTotalPercentage, ::onMovieClick)
+        triviaRecordAdapter = TriviaAdapter(triviaCategory, triviaTotalPercentage, ::onTriviaRecordClick)
 
         rvTriviaHistory.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         rvTriviaHistory.adapter = triviaRecordAdapter
@@ -64,7 +67,10 @@ class TriviaHistoryFragment : Fragment() {
         createItemTouchHelper().attachToRecyclerView(rvTriviaHistory)
     }
 
-    private fun onMovieClick(position: Int) {
+    /**
+     * Provides the upfollowing fragment the position of the clicked Trivia Record
+     */
+    private fun onTriviaRecordClick(position: Int) {
         setFragmentResult(
             REQ_TRIVIA_HISTORY_KEY,
             bundleOf(Pair(BUNDLE_TRIVIA_HISTORY_KEY, position))
@@ -73,6 +79,9 @@ class TriviaHistoryFragment : Fragment() {
         findNavController().navigate(R.id.action_triviaHistoryFragment_to_triviaHistoryDetailFragment)
     }
 
+    /**
+     * This makes it able for the user to delete a Trivia Record history
+     */
     private fun createItemTouchHelper(): ItemTouchHelper {
         val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
@@ -100,12 +109,18 @@ class TriviaHistoryFragment : Fragment() {
         return ItemTouchHelper(callback)
     }
 
+    /**
+     * Retrieves all the Trivia Records from the database
+     */
     private fun getTriviaRecordsFromDatabase() {
         CoroutineScope(Dispatchers.Main).launch {
+
+            // Retrieves all the categories
             val category = withContext(Dispatchers.IO) {
                 triviaRecordRepository.getAllCategories()
             }
 
+            // Retrieves a list of the amount of correct answer per category
             val totalCorrectAnswer = withContext(Dispatchers.IO) {
                 triviaRecordRepository.getTotalCorrectAnswers()
             }
@@ -122,9 +137,13 @@ class TriviaHistoryFragment : Fragment() {
         }
     }
 
+    /**
+     * Converts the amount of correct answers into a percentage
+     */
     private fun convertToPercentage(totalCorrectAnswer: List<Int>): List<Double> {
         val percentageInDoubleList: MutableList<Double> = mutableListOf()
 
+        // Loops through of all the amount of correct answers and convert it to percentage
         for (i in totalCorrectAnswer) {
             val percentage = ((100.0 / 8.0) * i)
             percentageInDoubleList.add(percentage)
